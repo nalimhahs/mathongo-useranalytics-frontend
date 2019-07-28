@@ -24,11 +24,13 @@ export default class ClassTable extends Component {
   state = {
     data: [],
     class: "O",
-    page: 1
+    page: 1,
+    totalCount: 0
   };
 
   BASE_URL =
-    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/class";
+    // "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/class";
+    "http://localhost:8000/api/filter/class";
 
   handleStartDateChange = date => {
     this.setState({ startDate: date });
@@ -57,8 +59,9 @@ export default class ClassTable extends Component {
       })
       .then(response => {
         var data = [];
-        response.data.map(json => {
+        response.data.results.map(json => {
           data.push(this.json2array(json));
+          this.setState({ totalCount: response.data.count });
         });
         this.setState({ data: data });
       });
@@ -164,6 +167,7 @@ export default class ClassTable extends Component {
               { text: "NEXT", onClick: this.handlePageNext }
             ]}
           />
+          Total Results: {this.state.totalCount}
         </Wrapper>
       </div>
     );

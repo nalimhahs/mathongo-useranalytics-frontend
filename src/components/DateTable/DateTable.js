@@ -21,12 +21,13 @@ export default class DateTable extends Component {
     data: [],
     startDate: new Date(),
     endDate: new Date(),
-    page: 1
+    page: 1,
+    totalCount: 0
   };
 
   BASE_URL =
-    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" +
-    this.props.type;
+    // "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" +
+    "http://localhost:8000/api/filter/" + this.props.type;
 
   handleStartDateChange = date => {
     this.setState({ startDate: date });
@@ -49,14 +50,14 @@ export default class DateTable extends Component {
     var start =
       this.state.startDate.getFullYear() +
       "-" +
-      this.state.startDate.getMonth() +
+      (this.state.endDate.getMonth() + 1) +
       "-" +
       this.state.startDate.getDate();
 
     var end =
       this.state.endDate.getFullYear() +
       "-" +
-      this.state.endDate.getMonth() +
+      (this.state.endDate.getMonth() + 1) +
       "-" +
       this.state.endDate.getDate();
     axios
@@ -69,8 +70,9 @@ export default class DateTable extends Component {
       })
       .then(response => {
         var data = [];
-        response.data.map(json => {
+        response.data.results.map(json => {
           data.push(this.json2array(json));
+          this.setState({ totalCount: response.data.count });
         });
         this.setState({ data: data });
       });
@@ -171,6 +173,7 @@ export default class DateTable extends Component {
               { text: "NEXT", onClick: this.handlePageNext }
             ]}
           />
+          Total Results: {this.state.totalCount}
         </Wrapper>
       </div>
     );
