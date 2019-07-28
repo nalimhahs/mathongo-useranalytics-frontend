@@ -63,8 +63,8 @@ class Dashboard extends React.Component {
   handleFetch = () => {
     this.setState({ isLoading: true });
     var BASE_URL =
-      // "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/";
-      "http://localhost:8000/api/";
+      "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/";
+      // "http://localhost:8000/api/";
     axios.get(BASE_URL).then(response => {
       this.setState({ data: response.data });
       this.setState({ isLoading: false });

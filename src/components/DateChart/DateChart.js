@@ -88,8 +88,8 @@ export default class DateTable extends Component {
   };
 
   BASE_URL =
-    // "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" +
-    "http://localhost:8000/api/charts/" + this.props.type;
+    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" + this.props.type;
+    // "http://localhost:8000/api/charts/" + this.props.type;
 
   handleStartDateChange = date => {
     this.setState({ startDate: date });
