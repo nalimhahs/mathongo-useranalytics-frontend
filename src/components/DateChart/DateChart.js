@@ -88,7 +88,7 @@ export default class DateTable extends Component {
   };
 
   BASE_URL =
-    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" + this.props.type;
+    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/charts/" + this.props.type;
     // "http://localhost:8000/api/charts/" + this.props.type;
 
   handleStartDateChange = date => {
@@ -125,8 +125,6 @@ export default class DateTable extends Component {
         var ModChartProps = this.state.chartProps;
         ModChartProps.options.high = Math.max(...response.data.series[0]) * 1.2;
         this.setState({ data: response.data, chartProps: ModChartProps });
-        console.log(this.props.type)
-        console.log(this.state.data)
       });
   };
 
