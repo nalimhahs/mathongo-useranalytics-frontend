@@ -7,6 +7,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import Paginations from "components/Pagination/Pagination.jsx";
 
 import axios from "axios";
+import { saveAs } from "file-saver";
 
 import { DatePicker } from "@material-ui/pickers";
 
@@ -14,6 +15,10 @@ const Wrapper = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+  ul {
+    margin: 0px !important;
+  }
 `;
 
 export default class DateTable extends Component {
@@ -26,8 +31,9 @@ export default class DateTable extends Component {
   };
 
   BASE_URL =
-    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" + this.props.type;
-    // "http://localhost:8000/api/filter/" + this.props.type;
+    "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/filter/" +
+    this.props.type;
+  // "http://localhost:8000/api/filter/" + this.props.type;
 
   handleStartDateChange = date => {
     this.setState({ startDate: date });
@@ -117,6 +123,38 @@ export default class DateTable extends Component {
     }
   };
 
+  handleExport = () => {
+    var start =
+      this.state.startDate.getFullYear() +
+      "-" +
+      (this.state.endDate.getMonth() + 1) +
+      "-" +
+      this.state.startDate.getDate();
+
+    var end =
+      this.state.endDate.getFullYear() +
+      "-" +
+      (this.state.endDate.getMonth() + 1) +
+      "-" +
+      this.state.endDate.getDate();
+
+    var url =
+      "http://ec2-13-235-74-15.ap-south-1.compute.amazonaws.com/api/csv/" + this.props.type;
+      // "http://localhost:8000/api/csv/" + this.props.type;
+
+    axios
+      .get(url, {
+        responseType: "blob",
+        params: {
+          start: start,
+          end: end
+        }
+      })
+      .then(response => {
+        saveAs(response.data, this.props.type + ".csv");
+      });
+  };
+
   setPagination = () => {
     var pages = [{ text: "PREV", onClick: this.handlePagePrev }];
     for (let i = -2; i <= 2; i++) {
@@ -174,6 +212,9 @@ export default class DateTable extends Component {
             ]}
           />
           Total Results: {this.state.totalCount}
+          <Button type="button" color="primary" onClick={this.handleExport}>
+            Export data
+          </Button>
         </Wrapper>
       </div>
     );
